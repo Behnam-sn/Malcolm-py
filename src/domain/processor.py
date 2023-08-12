@@ -4,28 +4,33 @@ from domain.utils import Utils
 
 class Processor:
     @staticmethod
-    def generate_time_summary(records: list[Record]) -> list:
+    def generate_entery_and_exit_items(records: list[Record]) -> list[dict]:
         filtered_records = Utils.filter_records_by_category(
-            records=records, categories=["ورود", "خروج"]
+            records=records, include=["ورود", "خروج"]
         )
-        logs = Utils.extract_logs(filtered_records)
-        time_summary = Utils.log_to_dictionary(logs)
-        return time_summary
+        items = Utils.excract_entery_and_exits_from_records(filtered_records)
+        return Utils.convert_item_to_dictionary(items)
 
     @staticmethod
-    def generate_daily_summary(records: list[Record]) -> list:
-        daily_summary = Utils.record_to_dictionary(records)
-        return daily_summary
+    def generate_daily_items(records: list[Record]) -> list[dict]:
+        filtered_records = Utils.filter_records_by_category(
+            records=records, exclude=["ورود", "خروج"]
+        )
+        items = Utils.convert_record_to_daily(filtered_records)
+        return Utils.convert_item_to_dictionary(items)
 
     @staticmethod
-    def generate_weekly_summary(records: list[Record], start: int, end: int) -> dict:
-        filtered_records = Utils.filter_records_by_date(records, start, end)
-        weekly_summary = Utils.summarize_records(filtered_records)
-        sorted_weekly_summary = Utils.sort_summary(weekly_summary)
-        return sorted_weekly_summary
+    def generate_weekly_items(records: list[Record]) -> list[dict]:
+        filtered_records = Utils.filter_records_by_category(
+            records=records, exclude=["ورود", "خروج"]
+        )
+        items = Utils.excract_weeklies_from_records(filtered_records)
+        return Utils.convert_item_to_dictionary(items)
 
     @staticmethod
-    def generate_monthly_summary(records: list[Record]) -> dict:
-        monthly_report = Utils.summarize_records(records)
-        sorted_monthly_report = Utils.sort_summary(monthly_report)
-        return sorted_monthly_report
+    def generate_monthly_items(records: list[Record]) -> list[dict]:
+        filtered_records = Utils.filter_records_by_category(
+            records=records, exclude=["ورود", "خروج"]
+        )
+        items = Utils.excract_monthlies_from_records(filtered_records)
+        return Utils.convert_item_to_dictionary(items)
