@@ -3,7 +3,7 @@ class Config:
 
     OUTPUT_FOLDER_NAME = "dist"
     OUTPUT_EXCEL_FILE_NAME = "Report"
-    ENTERY_AND_EXIT_REPORT_FILE_NAME = "time report"
+    ENTERY_AND_EXIT_REPORT_FILE_NAME = "entery and exit report"
     DAILY_REPORT_FILE_NAME = "daily report"
     WEEKLY_REPORT_FILE_NAME = "weekly report"
     MONTHLY_REPORT_FILE_NAME = "monthly report"

@@ -1,6 +1,3 @@
-import json
-from os import mkdir
-
 from openpyxl import Workbook
 
 from application.excel_utils import Excel_Utils
@@ -10,28 +7,6 @@ from domain.record import Record
 
 
 class Utils:
-    @staticmethod
-    def create_folder(path: str, name: str) -> None:
-        try:
-            mkdir(f"{path}\\{name}")
-
-        except Exception:
-            pass
-
-    @staticmethod
-    def items_to_text_file(items: list[dict], file_name: str) -> None:
-        Utils.create_folder(path=".\\", name="dist")
-
-        text_file = open(f"dist\\{file_name}.txt", "w", encoding="utf-8")
-
-        for item in items:
-            line = ""
-
-            for key in item:
-                line += f"{item[key]}\t"
-
-            text_file.write(f"{line}\n")
-
     @staticmethod
     def generate_entery_and_exit_report_sheet(
         excel: Workbook, records: list[Record]

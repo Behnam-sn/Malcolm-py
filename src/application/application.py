@@ -1,4 +1,5 @@
 from application.excel_utils import Excel_Utils
+from application.file_utils import File_Utils
 from application.utils import Utils
 from config import Config
 from domain.processor import Processor
@@ -9,25 +10,35 @@ class Application:
     def generate_entery_and_exit_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
         items = Processor.generate_entery_and_exit_items(records)
-        Utils.items_to_text_file(items, Config.ENTERY_AND_EXIT_REPORT_FILE_NAME)
+        File_Utils.list_of_dictionary_to_text_file(
+            items=items,
+            file_name=Config.ENTERY_AND_EXIT_REPORT_FILE_NAME,
+            separator="\t",
+        )
 
     @staticmethod
     def generate_daily_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
         items = Processor.generate_daily_items(records)
-        Utils.items_to_text_file(items, Config.DAILY_REPORT_FILE_NAME)
+        File_Utils.list_of_dictionary_to_text_file(
+            items=items, file_name=Config.DAILY_REPORT_FILE_NAME, separator="\t"
+        )
 
     @staticmethod
     def generate_weekly_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
         items = Processor.generate_weekly_items(records)
-        Utils.items_to_text_file(items, Config.WEEKLY_REPORT_FILE_NAME)
+        File_Utils.list_of_dictionary_to_text_file(
+            items=items, file_name=Config.WEEKLY_REPORT_FILE_NAME, separator="\t"
+        )
 
     @staticmethod
     def generate_monthly_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
         items = Processor.generate_monthly_items(records)
-        Utils.items_to_text_file(items, Config.MONTHLY_REPORT_FILE_NAME)
+        File_Utils.list_of_dictionary_to_text_file(
+            items=items, file_name=Config.MONTHLY_REPORT_FILE_NAME, separator="\t"
+        )
 
     @staticmethod
     def generate_full_report() -> None:
