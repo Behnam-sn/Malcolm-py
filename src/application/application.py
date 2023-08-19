@@ -44,13 +44,17 @@ class Application:
     def generate_full_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
 
-        excel = Excel_Utils.create_new_excel()
+        excel = Excel_Utils.create_workbook()
 
         Utils.generate_entery_and_exit_report_sheet(excel, records)
         Utils.generate_daily_report_sheet(excel, records)
         Utils.generate_weekly_report_sheet(excel, records)
         Utils.generate_monthly_report_sheet(excel, records)
 
+        Excel_Utils.automatically_adjust_width_of_workbook_columns(excel)
+        Excel_Utils.adjust_height_of_workbook_rows(excel, Config.ROW_HEIGHT)
+
+        Excel_Utils.delete_default_sheet(excel)
         Excel_Utils.save_excel(
             excel=excel,
             path=Config.OUTPUT_FOLDER_NAME,

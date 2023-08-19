@@ -1,3 +1,4 @@
+from config import Config
 from domain.record import Record
 from domain.utils import Utils
 
@@ -34,3 +35,29 @@ class Processor:
         )
         items = Utils.excract_monthlies_from_records(filtered_records)
         return Utils.convert_item_to_dictionary(items)
+
+    @staticmethod
+    def sort_items(items: list[dict]) -> list[dict]:
+        sorted_summary = {
+            "دانش نامه": [],
+            "جلسه": [],
+            "مطالعه": [],
+            "توسعه": [],
+            "گزارش": [],
+            "صورت جلسه": [],
+            "متفرقه": [],
+        }
+
+        for item in items:
+            if item["دسته بندی"] not in sorted_summary:
+                sorted_summary[item["دسته بندی"]] = []
+
+            sorted_summary[item["دسته بندی"]].append(item)
+
+        list = []
+
+        for item in sorted_summary.values():
+            for to in item:
+                list.append(to)
+
+        return list

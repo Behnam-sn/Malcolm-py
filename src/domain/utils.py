@@ -92,7 +92,7 @@ class Utils:
 
     @staticmethod
     def excract_weeklies_from_records(records: list[Record]) -> list[Weekly]:
-        weeklies = []
+        weeklies: list[Weekly] = []
         week_last_id = 0
         weekly_last_id = 0
 
@@ -124,7 +124,39 @@ class Utils:
                 weekly.time.increase_hour(amount=record.time_spent.hour)  # type: ignore
                 weekly.time.increace_minute(amount=record.time_spent.minute)  # type: ignore
 
-        return weeklies
+        sorted_summary = {
+            "دانش نامه": [],
+            "جلسه": [],
+            "مطالعه": [],
+            "توسعه": [],
+            "گزارش": [],
+            "صورت جلسه": [],
+            "متفرقه": [],
+        }
+
+        ddd = {}
+
+        for we in weeklies:
+            if we.week_id not in ddd:
+                ddd[we.week_id] = {
+                    "دانش نامه": [],
+                    "جلسه": [],
+                    "مطالعه": [],
+                    "توسعه": [],
+                    "گزارش": [],
+                    "صورت جلسه": [],
+                    "متفرقه": [],
+                }
+
+            ddd[we.week_id][we.category].append(we)
+
+        listt = []
+        for kk in ddd.values():
+            for aa in kk.values():
+                for ak in aa:
+                    listt.append(ak)
+
+        return listt
 
     @staticmethod
     def excract_monthlies_from_records(records: list[Record]) -> list[Monthly]:

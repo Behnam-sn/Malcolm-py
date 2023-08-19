@@ -1,5 +1,5 @@
 class Config:
-    INPUT_EXCEL_FILE_PATH = "C:\\Users\\Behnam\\Downloads\\lfeo.xlsx"
+    INPUT_EXCEL_FILE_PATH = "C:\\Users\\Behnam\\Downloads\\dorcci.xlsx"
 
     OUTPUT_FOLDER_NAME = "dist"
     OUTPUT_EXCEL_FILE_NAME = "Report"
@@ -13,13 +13,13 @@ class Config:
     WEEKLY_REPORT_SHEET_NAME = "گزارش هفتگی"
     MONTHLY_REPORT_SHEET_NAME = "گزارش ماهانه"
 
-    ITEM_DATE = 0
-    ITEM_DAY_IN_WEEK = 1
-    ITEM_START_TIME = 2
-    ITEM_CATEGORY = 3
-    ITEM_SUBJECT = 4
-    ITEM_DETAIL = 5
-    ITEM_TIME_SPENT = 6
+    DATE_INDEX = 0
+    DAY_IN_WEEK_INDEX = 1
+    START_TIME_INDEX = 2
+    CATEGORY_INDEX = 3
+    SUBJECT_INDEX = 4
+    DETAIL_INDEX = 5
+    TIME_SPENT_INDEX = 6
 
     WEEKS = [
         [3, 9],
@@ -36,3 +36,9 @@ class Config:
         "صورت جلسه",
         "متفرقه",
     ]
+
+    FONT_NAME = "Shabnam FD"
+    HEADLINE_FONT_SIZE = 11
+    LINE_FONT_SIZE = 10
+
+    ROW_HEIGHT = 28
