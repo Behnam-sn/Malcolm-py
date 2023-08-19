@@ -11,8 +11,8 @@ class File_Utils:
             pass
 
     @staticmethod
-    def list_of_dictionary_to_text_file(
-        items: list[dict], file_name: str, separator: str = " "
+    def generate_text_file_from_list_of_dictionaries(
+        items: list[dict[str, str]], file_name: str, separator: str = " "
     ) -> None:
         File_Utils.create_folder(path=".\\", name="dist")
 

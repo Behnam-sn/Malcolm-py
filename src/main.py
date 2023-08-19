@@ -9,7 +9,6 @@ if __name__ == "__main__":
 
     # todo: conditional rendering: daily, weekly, monthy
     # todo: sort catoegories
-    # todo: calculate entery and exit
     # todo: weekly summary
     # todo: monthly summary
     # todo: merge
