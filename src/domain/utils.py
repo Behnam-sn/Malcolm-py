@@ -64,15 +64,6 @@ class Utils:
         return dailies
 
     @staticmethod
-    def convert_item_to_dictionary(items: list) -> list[dict]:
-        list = []
-
-        for item in items:
-            list.append(item.convert_to_dictionary())
-
-        return list
-
-    @staticmethod
     def excract_entery_and_exits_from_records(
         records: list[Record],
     ) -> list[Entery_And_Exit]:

@@ -1,4 +1,5 @@
 from openpyxl import Workbook, load_workbook
+from openpyxl.cell import Cell
 from openpyxl.styles import Alignment, Font
 from openpyxl.worksheet.worksheet import Worksheet
 
@@ -106,26 +107,35 @@ class Excel_Utils:
         return records
 
     @staticmethod
-    def add_headlines_to_sheet(sheet: Worksheet, items: list[str]) -> None:
+    def appned_list_of_string_to_sheet(
+        sheet: Worksheet, items: list[str], format_cell_method
+    ) -> None:
         row_index = sheet.max_row
+        row_index += 1
 
         for column_index, value in enumerate(items):
             column_index += 1
             cell = sheet.cell(row=row_index, column=column_index)
-
             cell.value = value
-            cell.font = Font(
-                name=Config.FONT_NAME,
-                size=Config.HEADLINE_FONT_SIZE,
-                bold=True,
-            )
-            cell.alignment = Alignment(
-                horizontal="center",
-                vertical="center",
-            )
+            format_cell_method(cell)
 
     @staticmethod
-    def add_list_of_dictionary_to_sheet(sheet: Worksheet, items: list[dict]) -> None:
+    def append_dictionary_to_sheet(
+        sheet: Worksheet, dictionary: dict, format_cell_method
+    ) -> None:
+        row_index = sheet.max_row
+        row_index += 1
+
+        for column_index, value in enumerate(dictionary.values()):
+            column_index += 1
+            cell = sheet.cell(row=row_index, column=column_index)
+            cell.value = value
+            format_cell_method(cell)
+
+    @staticmethod
+    def append_list_of_dictionary_to_sheet(
+        sheet: Worksheet, items: list[dict], format_cell_method
+    ) -> None:
         row_index = sheet.max_row
 
         for item in items:
@@ -134,32 +144,28 @@ class Excel_Utils:
             for column_index, value in enumerate(item.values()):
                 column_index += 1
                 cell = sheet.cell(row=row_index, column=column_index)
-
                 cell.value = value
-                cell.font = Font(
-                    name=Config.FONT_NAME,
-                    size=Config.LINE_FONT_SIZE,
-                )
-                cell.alignment = Alignment(
-                    horizontal="center",
-                    vertical="center",
-                )
+                format_cell_method(cell)
 
     @staticmethod
-    def add_dictionary_to_sheet(sheet: Worksheet, dictionary: dict) -> None:
-        row_index = sheet.max_row
-        row_index += 1
+    def format_cell_default(cell: Cell) -> None:
+        cell.font = Font(
+            name=Config.FONT_NAME,
+            size=Config.LINE_FONT_SIZE,
+        )
+        cell.alignment = Alignment(
+            horizontal="center",
+            vertical="center",
+        )
 
-        for column_index, value in enumerate(dictionary.values()):
-            column_index += 1
-            cell = sheet.cell(row=row_index, column=column_index)
-
-            cell.value = value
-            cell.font = Font(
-                name=Config.FONT_NAME,
-                size=Config.LINE_FONT_SIZE,
-            )
-            cell.alignment = Alignment(
-                horizontal="center",
-                vertical="center",
-            )
+    @staticmethod
+    def format_cell_headline(cell: Cell) -> None:
+        cell.font = Font(
+            name=Config.FONT_NAME,
+            size=Config.HEADLINE_FONT_SIZE,
+            bold=True,
+        )
+        cell.alignment = Alignment(
+            horizontal="center",
+            vertical="center",
+        )

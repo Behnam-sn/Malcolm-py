@@ -8,7 +8,9 @@ from domain.record import Record
 
 class Utils:
     @staticmethod
-    def convert_item_to_dictionary(items: list) -> list[dict]:
+    def convert_list_of_items_to_list_of_dictionaries(
+        items: list,
+    ) -> list[dict[str, str]]:
         list = []
 
         for item in items:
@@ -17,9 +19,27 @@ class Utils:
         return list
 
     @staticmethod
+    def extract_headline_from_item(item: dict) -> list[str]:
+        headlines = []
+
+        for key in item:
+            headlines.append(key)
+
+        return headlines
+
+    @staticmethod
+    def extract_headline_from_items(items: list) -> list[str]:
+        headlines = []
+        item = items[0]
+
+        for key in item:
+            headlines.append(key)
+
+        return headlines
+
+    @staticmethod
     def generate_entery_and_exit_report_sheet(
-        workbook: Workbook,
-        records: list[Record],
+        workbook: Workbook, records: list[Record]
     ) -> None:
         sheet = Excel_Utils.create_sheet(
             workbook=workbook,
@@ -28,15 +48,33 @@ class Utils:
         Excel_Utils.change_sheet_direction_from_right_to_left(sheet)
 
         entery_and_exit = Processor.generate_entery_and_exit_items(records)
-        items = Utils.convert_item_to_dictionary(entery_and_exit)
-        headlines = Utils.extract_headline_from_item(items)
+        items = Utils.convert_list_of_items_to_list_of_dictionaries(entery_and_exit)
+        headlines = Utils.extract_headline_from_items(items)
         summary = Processor.generate_entery_and_exit_sammary(
             entery_and_exit
         ).convert_to_dictionary()
+        summary_headlines = Utils.extract_headline_from_item(summary)
 
-        Excel_Utils.add_headlines_to_sheet(sheet, headlines)
-        Excel_Utils.add_list_of_dictionary_to_sheet(sheet, items)
-        Excel_Utils.add_dictionary_to_sheet(sheet, summary)
+        Excel_Utils.appned_list_of_string_to_sheet(
+            sheet=sheet,
+            items=headlines,
+            format_cell_method=Excel_Utils.format_cell_headline,
+        )
+        Excel_Utils.append_list_of_dictionary_to_sheet(
+            sheet=sheet,
+            items=items,
+            format_cell_method=Excel_Utils.format_cell_default,
+        )
+        Excel_Utils.appned_list_of_string_to_sheet(
+            sheet=sheet,
+            items=summary_headlines,
+            format_cell_method=Excel_Utils.format_cell_headline,
+        )
+        Excel_Utils.append_dictionary_to_sheet(
+            sheet=sheet,
+            dictionary=summary,
+            format_cell_method=Excel_Utils.format_cell_default,
+        )
 
     @staticmethod
     def generate_daily_report_sheet(workbook: Workbook, records: list[Record]) -> None:
@@ -45,11 +83,21 @@ class Utils:
             name=Config.DAILY_REPORT_SHEET_NAME,
         )
         Excel_Utils.change_sheet_direction_from_right_to_left(sheet)
-        items = Processor.generate_daily_items(records)
-        headlines = Utils.extract_headline_from_item(items)
 
-        Excel_Utils.add_headlines_to_sheet(sheet, headlines)
-        Excel_Utils.add_list_of_dictionary_to_sheet(sheet, items)
+        items = Processor.generate_daily_items(records)
+        dicts = Utils.convert_list_of_items_to_list_of_dictionaries(items)
+        headlines = Utils.extract_headline_from_items(dicts)
+
+        Excel_Utils.appned_list_of_string_to_sheet(
+            sheet=sheet,
+            items=headlines,
+            format_cell_method=Excel_Utils.format_cell_headline,
+        )
+        Excel_Utils.append_list_of_dictionary_to_sheet(
+            sheet=sheet,
+            items=dicts,
+            format_cell_method=Excel_Utils.format_cell_default,
+        )
 
     @staticmethod
     def generate_weekly_report_sheet(workbook: Workbook, records: list[Record]) -> None:
@@ -58,11 +106,21 @@ class Utils:
             name=Config.WEEKLY_REPORT_SHEET_NAME,
         )
         Excel_Utils.change_sheet_direction_from_right_to_left(sheet)
-        items = Processor.generate_weekly_items(records)
-        headlines = Utils.extract_headline_from_item(items)
 
-        Excel_Utils.add_headlines_to_sheet(sheet, headlines)
-        Excel_Utils.add_list_of_dictionary_to_sheet(sheet, items)
+        items = Processor.generate_weekly_items(records)
+        dicts = Utils.convert_list_of_items_to_list_of_dictionaries(items)
+        headlines = Utils.extract_headline_from_items(dicts)
+
+        Excel_Utils.appned_list_of_string_to_sheet(
+            sheet=sheet,
+            items=headlines,
+            format_cell_method=Excel_Utils.format_cell_headline,
+        )
+        Excel_Utils.append_list_of_dictionary_to_sheet(
+            sheet=sheet,
+            items=dicts,
+            format_cell_method=Excel_Utils.format_cell_default,
+        )
 
     @staticmethod
     def generate_monthly_report_sheet(
@@ -73,17 +131,19 @@ class Utils:
             name=Config.MONTHLY_REPORT_SHEET_NAME,
         )
         Excel_Utils.change_sheet_direction_from_right_to_left(sheet)
+
         items = Processor.generate_monthly_items(records)
-        sorted_items = Processor.sort_items(items=items)
-        headlines = Utils.extract_headline_from_item(items)
+        dicts = Utils.convert_list_of_items_to_list_of_dictionaries(items)
+        sorted_items = Processor.sort_items(items=dicts)
+        headlines = Utils.extract_headline_from_items(dicts)
 
-        Excel_Utils.add_headlines_to_sheet(sheet, headlines)
-        Excel_Utils.add_list_of_dictionary_to_sheet(sheet, sorted_items)
-
-    @staticmethod
-    def extract_headline_from_item(items: list) -> list[str]:
-        headlines = []
-        item = items[0]
-        for key in item:
-            headlines.append(key)
-        return headlines
+        Excel_Utils.appned_list_of_string_to_sheet(
+            sheet=sheet,
+            items=headlines,
+            format_cell_method=Excel_Utils.format_cell_headline,
+        )
+        Excel_Utils.append_list_of_dictionary_to_sheet(
+            sheet=sheet,
+            items=sorted_items,
+            format_cell_method=Excel_Utils.format_cell_default,
+        )

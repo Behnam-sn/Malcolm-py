@@ -10,7 +10,7 @@ class Application:
     def generate_entery_and_exit_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
         entery_and_exits = Processor.generate_entery_and_exit_items(records)
-        items = Utils.convert_item_to_dictionary(entery_and_exits)
+        items = Utils.convert_list_of_items_to_list_of_dictionaries(entery_and_exits)
         File_Utils.list_of_dictionary_to_text_file(
             items=items,
             file_name=Config.ENTERY_AND_EXIT_REPORT_FILE_NAME,
@@ -20,7 +20,8 @@ class Application:
     @staticmethod
     def generate_daily_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
-        items = Processor.generate_daily_items(records)
+        dailies = Processor.generate_daily_items(records)
+        items = Utils.convert_list_of_items_to_list_of_dictionaries(dailies)
         File_Utils.list_of_dictionary_to_text_file(
             items=items, file_name=Config.DAILY_REPORT_FILE_NAME, separator="\t"
         )
@@ -28,7 +29,8 @@ class Application:
     @staticmethod
     def generate_weekly_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
-        items = Processor.generate_weekly_items(records)
+        weeklies = Processor.generate_weekly_items(records)
+        items = Utils.convert_list_of_items_to_list_of_dictionaries(weeklies)
         File_Utils.list_of_dictionary_to_text_file(
             items=items, file_name=Config.WEEKLY_REPORT_FILE_NAME, separator="\t"
         )
@@ -36,7 +38,8 @@ class Application:
     @staticmethod
     def generate_monthly_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
-        items = Processor.generate_monthly_items(records)
+        monthlies = Processor.generate_monthly_items(records)
+        items = Utils.convert_list_of_items_to_list_of_dictionaries(monthlies)
         File_Utils.list_of_dictionary_to_text_file(
             items=items, file_name=Config.MONTHLY_REPORT_FILE_NAME, separator="\t"
         )

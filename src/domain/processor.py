@@ -1,9 +1,12 @@
 from config import Config
+from domain.daily import Daily
 from domain.entery_and_exit import Entery_And_Exit
 from domain.entery_and_exit_summary import Entery_And_Exit_Summary
+from domain.monthly import Monthly
 from domain.record import Record
 from domain.time import Time
 from domain.utils import Utils
+from domain.weekly import Weekly
 
 
 class Processor:
@@ -14,7 +17,27 @@ class Processor:
         )
         entery_and_exits = Utils.excract_entery_and_exits_from_records(filtered_records)
         return entery_and_exits
-        # return Utils.convert_item_to_dictionary(items)
+
+    @staticmethod
+    def generate_daily_items(records: list[Record]) -> list[Daily]:
+        filtered_records = Utils.filter_records_by_category(
+            records=records, exclude=["ورود", "خروج"]
+        )
+        return Utils.convert_record_to_daily(filtered_records)
+
+    @staticmethod
+    def generate_weekly_items(records: list[Record]) -> list[Weekly]:
+        filtered_records = Utils.filter_records_by_category(
+            records=records, exclude=["ورود", "خروج"]
+        )
+        return Utils.excract_weeklies_from_records(filtered_records)
+
+    @staticmethod
+    def generate_monthly_items(records: list[Record]) -> list[Monthly]:
+        filtered_records = Utils.filter_records_by_category(
+            records=records, exclude=["ورود", "خروج"]
+        )
+        return Utils.excract_monthlies_from_records(filtered_records)
 
     @staticmethod
     def generate_entery_and_exit_sammary(
@@ -50,30 +73,6 @@ class Processor:
             total_time,
         )
         return summary
-
-    @staticmethod
-    def generate_daily_items(records: list[Record]) -> list[dict]:
-        filtered_records = Utils.filter_records_by_category(
-            records=records, exclude=["ورود", "خروج"]
-        )
-        items = Utils.convert_record_to_daily(filtered_records)
-        return Utils.convert_item_to_dictionary(items)
-
-    @staticmethod
-    def generate_weekly_items(records: list[Record]) -> list[dict]:
-        filtered_records = Utils.filter_records_by_category(
-            records=records, exclude=["ورود", "خروج"]
-        )
-        items = Utils.excract_weeklies_from_records(filtered_records)
-        return Utils.convert_item_to_dictionary(items)
-
-    @staticmethod
-    def generate_monthly_items(records: list[Record]) -> list[dict]:
-        filtered_records = Utils.filter_records_by_category(
-            records=records, exclude=["ورود", "خروج"]
-        )
-        items = Utils.excract_monthlies_from_records(filtered_records)
-        return Utils.convert_item_to_dictionary(items)
 
     @staticmethod
     def sort_items(items: list[dict]) -> list[dict]:
