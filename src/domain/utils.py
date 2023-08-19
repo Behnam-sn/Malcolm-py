@@ -73,7 +73,9 @@ class Utils:
         return list
 
     @staticmethod
-    def excract_entery_and_exits_from_records(records: list[Record]):
+    def excract_entery_and_exits_from_records(
+        records: list[Record],
+    ) -> list[Entery_And_Exit]:
         logs: dict[str, Entery_And_Exit] = {}
         log_last_id = 0
 

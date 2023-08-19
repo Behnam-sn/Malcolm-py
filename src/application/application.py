@@ -9,7 +9,8 @@ class Application:
     @staticmethod
     def generate_entery_and_exit_report() -> None:
         records = Excel_Utils.extract_records_from_excel(Config.INPUT_EXCEL_FILE_PATH)
-        items = Processor.generate_entery_and_exit_items(records)
+        entery_and_exits = Processor.generate_entery_and_exit_items(records)
+        items = Utils.convert_item_to_dictionary(entery_and_exits)
         File_Utils.list_of_dictionary_to_text_file(
             items=items,
             file_name=Config.ENTERY_AND_EXIT_REPORT_FILE_NAME,

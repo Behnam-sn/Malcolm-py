@@ -144,3 +144,22 @@ class Excel_Utils:
                     horizontal="center",
                     vertical="center",
                 )
+
+    @staticmethod
+    def add_dictionary_to_sheet(sheet: Worksheet, dictionary: dict) -> None:
+        row_index = sheet.max_row
+        row_index += 1
+
+        for column_index, value in enumerate(dictionary.values()):
+            column_index += 1
+            cell = sheet.cell(row=row_index, column=column_index)
+
+            cell.value = value
+            cell.font = Font(
+                name=Config.FONT_NAME,
+                size=Config.LINE_FONT_SIZE,
+            )
+            cell.alignment = Alignment(
+                horizontal="center",
+                vertical="center",
+            )

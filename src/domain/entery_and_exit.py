@@ -25,24 +25,32 @@ class Entery_And_Exit:
         }
 
     def set_entery_time(self, time: datetime.time):
-        self.entery_time = Time(hour=time.hour, minute=time.minute)
+        self.entery_time = Time(
+            hour=time.hour,
+            minute=time.minute,
+        )
         self.compute_total_time()
 
     def set_exit_time(self, time: datetime.time):
-        self.exit_time = Time(hour=time.hour, minute=time.minute)
+        self.exit_time = Time(
+            hour=time.hour,
+            minute=time.minute,
+        )
         self.compute_total_time()
 
     def compute_total_time(self):
         if self.entery_time == None or self.exit_time == None:
             return
 
-        hour = self.exit_time.hour - self.entery_time.hour
+        hour = self.exit_time.hour
+        minute = self.exit_time.minute
 
         if self.entery_time.minute > self.exit_time.minute:
             hour -= 1
-            self.exit_time.minute += 60
+            minute += 60
 
-        minute = self.exit_time.minute - self.entery_time.minute
+        hour -= self.entery_time.hour
+        minute -= self.entery_time.minute
 
         self.total_time.hour = hour
         self.total_time.minute = minute

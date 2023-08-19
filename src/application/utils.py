@@ -8,6 +8,15 @@ from domain.record import Record
 
 class Utils:
     @staticmethod
+    def convert_item_to_dictionary(items: list) -> list[dict]:
+        list = []
+
+        for item in items:
+            list.append(item.convert_to_dictionary())
+
+        return list
+
+    @staticmethod
     def generate_entery_and_exit_report_sheet(
         workbook: Workbook,
         records: list[Record],
@@ -18,11 +27,16 @@ class Utils:
         )
         Excel_Utils.change_sheet_direction_from_right_to_left(sheet)
 
-        items = Processor.generate_entery_and_exit_items(records)
+        entery_and_exit = Processor.generate_entery_and_exit_items(records)
+        items = Utils.convert_item_to_dictionary(entery_and_exit)
         headlines = Utils.extract_headline_from_item(items)
+        summary = Processor.generate_entery_and_exit_sammary(
+            entery_and_exit
+        ).convert_to_dictionary()
 
         Excel_Utils.add_headlines_to_sheet(sheet, headlines)
         Excel_Utils.add_list_of_dictionary_to_sheet(sheet, items)
+        Excel_Utils.add_dictionary_to_sheet(sheet, summary)
 
     @staticmethod
     def generate_daily_report_sheet(workbook: Workbook, records: list[Record]) -> None:
