@@ -37,6 +37,15 @@ class Config:
         "متفرقه",
     ]
 
+    CATEGORIES_COLOR = {
+        "دانش نامه": "A9D08E",
+        "توسعه": "FF4D4D",
+        "جلسه": "FFD966",
+        "مطالعه": "F4B084",
+        "گزارش": "8EA9DB",
+        "صورت جلسه": "C9C9C9",
+    }
+
     FONT_NAME = "Shabnam FD"
     HEADLINE_FONT_SIZE = 11
     LINE_FONT_SIZE = 10

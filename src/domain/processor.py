@@ -1,4 +1,3 @@
-from config import Config
 from domain.daily import Daily
 from domain.entery_and_exit import Entery_And_Exit
 from domain.entery_and_exit_summary import Entery_And_Exit_Summary
@@ -15,8 +14,7 @@ class Processor:
         filtered_records = Utils.filter_records_by_category(
             records=records, include=["ورود", "خروج"]
         )
-        entery_and_exits = Utils.excract_entery_and_exits_from_records(filtered_records)
-        return entery_and_exits
+        return Utils.excract_entery_and_exits_from_records(filtered_records)
 
     @staticmethod
     def generate_daily_items(records: list[Record]) -> list[Daily]:
@@ -66,13 +64,12 @@ class Processor:
         )
         average_exit_time = Time.convert_minutes_to_time(average_exit_time_by_minutes)
 
-        summary = Entery_And_Exit_Summary(
+        return Entery_And_Exit_Summary(
             total_days,
             average_entery_time,
             average_exit_time,
             total_time,
         )
-        return summary
 
     @staticmethod
     def sort_items(items: list[dict]) -> list[dict]:

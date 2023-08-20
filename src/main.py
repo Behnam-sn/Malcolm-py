@@ -8,7 +8,8 @@ if __name__ == "__main__":
     Application.generate_full_report()
 
     # todo: conditional rendering: daily, weekly, monthy
-    # todo: sort catoegories
+    # todo: sort items by catoegory
     # todo: weekly summary
     # todo: monthly summary
     # todo: merge
+    # todo: config cell padding
