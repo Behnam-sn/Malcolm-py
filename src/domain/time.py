@@ -11,7 +11,7 @@ class Time:
     def increase_hour(self, amount: int) -> None:
         self.hour += amount
 
-    def increace_minute(self, amount: int) -> None:
+    def increase_minute(self, amount: int) -> None:
         self.minute += amount
 
         if self.minute >= 60:
@@ -28,7 +28,7 @@ class Time:
     def __add__(self, time):
         new_time = Time(self.hour, self.minute)
         new_time.increase_hour(time.hour)
-        new_time.increace_minute(time.minute)
+        new_time.increase_minute(time.minute)
         return new_time
 
     @staticmethod

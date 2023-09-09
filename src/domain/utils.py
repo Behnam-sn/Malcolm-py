@@ -1,7 +1,7 @@
 from config import Config
 from domain.daily import Daily
 from domain.date_utils import Date_Utils
-from domain.entery_and_exit import Entery_And_Exit
+from domain.enter_and_exit import Enter_And_Exit
 from domain.monthly import Monthly
 from domain.record import Record
 from domain.weekly import Weekly
@@ -64,19 +64,19 @@ class Utils:
         return dailies
 
     @staticmethod
-    def excract_entery_and_exits_from_records(
+    def extract_enter_and_exits_from_records(
         records: list[Record],
-    ) -> list[Entery_And_Exit]:
-        logs: dict[str, Entery_And_Exit] = {}
+    ) -> list[Enter_And_Exit]:
+        logs: dict[str, Enter_And_Exit] = {}
         log_last_id = 0
 
         for record in records:
             if record.date not in logs:
                 log_last_id += 1
-                logs[record.date] = Entery_And_Exit(id=log_last_id, date=record.date)
+                logs[record.date] = Enter_And_Exit(id=log_last_id, date=record.date)
 
             if record.category == "ورود":
-                logs[record.date].set_entery_time(record.start_time)
+                logs[record.date].set_enter_time(record.start_time)
 
             if record.category == "خروج":
                 logs[record.date].set_exit_time(record.start_time)
@@ -84,7 +84,7 @@ class Utils:
         return list(logs.values())
 
     @staticmethod
-    def excract_weeklies_from_records(records: list[Record]) -> list[Weekly]:
+    def extract_weeklies_from_records(records: list[Record]) -> list[Weekly]:
         weeklies: list[Weekly] = []
         week_last_id = 0
         weekly_last_id = 0
@@ -115,7 +115,7 @@ class Utils:
                     weeklies.append(weekly)
 
                 weekly.time.increase_hour(amount=record.time_spent.hour)  # type: ignore
-                weekly.time.increace_minute(amount=record.time_spent.minute)  # type: ignore
+                weekly.time.increase_minute(amount=record.time_spent.minute)  # type: ignore
 
         sorted_summary = {
             "دانش نامه": [],
@@ -152,7 +152,7 @@ class Utils:
         return listt
 
     @staticmethod
-    def excract_monthlies_from_records(records: list[Record]) -> list[Monthly]:
+    def extract_monthlies_from_records(records: list[Record]) -> list[Monthly]:
         monthlies = []
         monthly_last_id = 0
 
@@ -173,7 +173,7 @@ class Utils:
                 monthlies.append(monthly)
 
             monthly.time.increase_hour(amount=record.time_spent.hour)  # type: ignore
-            monthly.time.increace_minute(amount=record.time_spent.minute)  # type: ignore
+            monthly.time.increase_minute(amount=record.time_spent.minute)  # type: ignore
 
         return monthlies
 

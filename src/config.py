@@ -1,14 +1,16 @@
 class Config:
-    INPUT_EXCEL_FILE_PATH = "C:\\Users\\Behnam\\Downloads\\dorcci.xlsx"
+    INPUT_EXCEL_FILE_PATH = (
+        "C:\\Users\\Behnam\\OneDrive\\Tiba\\Reports\\1402-05 اطلاعات مرداد.xlsx"
+    )
 
     OUTPUT_FOLDER_NAME = "dist"
     OUTPUT_EXCEL_FILE_NAME = "Report"
-    ENTERY_AND_EXIT_REPORT_FILE_NAME = "entery and exit report"
+    ENTER_AND_EXIT_REPORT_FILE_NAME = "enter and exit report"
     DAILY_REPORT_FILE_NAME = "daily report"
     WEEKLY_REPORT_FILE_NAME = "weekly report"
     MONTHLY_REPORT_FILE_NAME = "monthly report"
 
-    ENTERY_AND_EXIT_SHEET_NAME = "ورود و خروج"
+    ENTER_AND_EXIT_SHEET_NAME = "ورود و خروج"
     DAILY_REPORT_SHEET_NAME = "گزارش روزانه"
     WEEKLY_REPORT_SHEET_NAME = "گزارش هفتگی"
     MONTHLY_REPORT_SHEET_NAME = "گزارش ماهانه"
@@ -45,6 +47,8 @@ class Config:
         "گزارش": "8EA9DB",
         "صورت جلسه": "C9C9C9",
     }
+
+    SUMMARY_COLOR = "92D050"
 
     FONT_NAME = "Shabnam FD"
     HEADLINE_FONT_SIZE = 11

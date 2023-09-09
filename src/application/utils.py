@@ -1,5 +1,4 @@
 from openpyxl import Workbook
-from openpyxl.cell import Cell
 from openpyxl.styles import PatternFill
 from openpyxl.styles.colors import Color
 from openpyxl.worksheet.worksheet import Worksheet
@@ -11,32 +10,6 @@ from domain.record import Record
 
 
 class Utils:
-    @staticmethod
-    def extract_records_from_excel(excel_file_path: str) -> list[Record]:
-        records = []
-        record_last_id = 0
-
-        workbook = Excel_Utils.load_workbook(excel_file_path)
-        sheet = workbook.active
-
-        for row in sheet.iter_rows(min_row=2, values_only=True):  # type: ignore
-            record_last_id += 1
-
-            record = Record(
-                id=record_last_id,
-                date=row[Config.DATE_INDEX],
-                day_in_week=row[Config.DAY_IN_WEEK_INDEX],
-                start_time=row[Config.START_TIME_INDEX],
-                category=row[Config.CATEGORY_INDEX],
-                subject=row[Config.SUBJECT_INDEX],
-                detail=row[Config.DETAIL_INDEX],
-                time_spent=row[Config.TIME_SPENT_INDEX],
-            )
-
-            records.append(record)
-
-        return records
-
     @staticmethod
     def convert_list_of_items_to_list_of_dictionaries(
         items: list,
@@ -68,42 +41,44 @@ class Utils:
         return headlines
 
     @staticmethod
-    def generate_entery_and_exit_report_sheet(
+    def generate_enter_and_exit_report_sheet(
         workbook: Workbook, records: list[Record]
     ) -> None:
         sheet = Excel_Utils.create_sheet_with_default_options(
             workbook=workbook,
-            name=Config.ENTERY_AND_EXIT_SHEET_NAME,
+            name=Config.ENTER_AND_EXIT_SHEET_NAME,
         )
 
-        entery_and_exit = Processor.generate_entery_and_exit_items(records)
-        items = Utils.convert_list_of_items_to_list_of_dictionaries(entery_and_exit)
+        enter_and_exit = Processor.generate_enter_and_exit_items(records)
+        items = Utils.convert_list_of_items_to_list_of_dictionaries(enter_and_exit)
         headlines = Utils.extract_headline_from_items(items)
-        summary = Processor.generate_entery_and_exit_sammary(
-            entery_and_exit
+        summary = Processor.generate_enter_and_exit_summary(
+            enter_and_exit
         ).convert_to_dictionary()
         summary_headlines = Utils.extract_headline_from_item(summary)
 
-        Excel_Utils.appned_list_of_string_to_sheet(
+        Excel_Utils.append_list_of_string_to_sheet(
             sheet=sheet,
             items=headlines,
-            format_cell_method=Excel_Utils.format_cell_headline,
+            cell_formatting_method=Excel_Utils.format_cell_headline,
         )
         Excel_Utils.append_list_of_dictionary_to_sheet(
             sheet=sheet,
             items=items,
-            format_cell_method=Excel_Utils.format_cell_default,
-        )
-        Excel_Utils.appned_list_of_string_to_sheet(
-            sheet=sheet,
-            items=summary_headlines,
-            format_cell_method=Excel_Utils.format_cell_headline,
+            cell_formatting_method=Excel_Utils.format_cell_default,
         )
         Excel_Utils.append_dictionary_to_sheet(
             sheet=sheet,
             dictionary=summary,
-            format_cell_method=Excel_Utils.format_cell_default,
+            cell_formatting_method=Excel_Utils.format_cell_summary,
         )
+        Excel_Utils.append_list_of_string_to_sheet(
+            sheet=sheet,
+            items=summary_headlines,
+            cell_formatting_method=Excel_Utils.format_cell_summary,
+        )
+
+        Utils.freeze_top_row(sheet=sheet)
 
     @staticmethod
     def generate_daily_report_sheet(workbook: Workbook, records: list[Record]) -> None:
@@ -116,18 +91,19 @@ class Utils:
         dicts = Utils.convert_list_of_items_to_list_of_dictionaries(items)
         headlines = Utils.extract_headline_from_items(dicts)
 
-        Excel_Utils.appned_list_of_string_to_sheet(
+        Excel_Utils.append_list_of_string_to_sheet(
             sheet=sheet,
             items=headlines,
-            format_cell_method=Excel_Utils.format_cell_headline,
+            cell_formatting_method=Excel_Utils.format_cell_headline,
         )
         Excel_Utils.append_list_of_dictionary_to_sheet(
             sheet=sheet,
             items=dicts,
-            format_cell_method=Excel_Utils.format_cell_default,
+            cell_formatting_method=Excel_Utils.format_cell_default,
         )
 
-        Utils.format_catoegories(sheet=sheet, catoegories_column_index=4)
+        Utils.freeze_top_row(sheet=sheet)
+        Utils.format_categories(sheet=sheet, categories_column_index=4)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=1)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=2)
 
@@ -142,58 +118,73 @@ class Utils:
         dicts = Utils.convert_list_of_items_to_list_of_dictionaries(items)
         headlines = Utils.extract_headline_from_items(dicts)
 
-        Excel_Utils.appned_list_of_string_to_sheet(
+        Excel_Utils.append_list_of_string_to_sheet(
             sheet=sheet,
             items=headlines,
-            format_cell_method=Excel_Utils.format_cell_headline,
+            cell_formatting_method=Excel_Utils.format_cell_headline,
         )
         Excel_Utils.append_list_of_dictionary_to_sheet(
             sheet=sheet,
             items=dicts,
-            format_cell_method=Excel_Utils.format_cell_default,
+            cell_formatting_method=Excel_Utils.format_cell_default,
         )
 
-        Utils.format_catoegories(sheet=sheet, catoegories_column_index=2)
+        Utils.freeze_top_row(sheet=sheet)
+        Utils.format_categories(sheet=sheet, categories_column_index=2)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=1)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=2)
 
     @staticmethod
     def generate_monthly_report_sheet(
-        workbook: Workbook, records: list[Record]
+        workbook: Workbook,
+        records: list[Record],
     ) -> None:
         sheet = Excel_Utils.create_sheet_with_default_options(
             workbook=workbook,
             name=Config.MONTHLY_REPORT_SHEET_NAME,
         )
 
-        items = Processor.generate_monthly_items(records)
-        dicts = Utils.convert_list_of_items_to_list_of_dictionaries(items)
-        sorted_items = Processor.sort_items(items=dicts)
+        monthly_items = Processor.generate_monthly_items(records)
+        monthly_summary = Processor.generate_monthly_summary(monthly_items)
+        dicts = monthly_summary.convert_to_list_of_dictionaries()
+
+        # dicts = Utils.convert_list_of_items_to_list_of_dictionaries(monthly_items)
+        # sorted_items = Processor.sort_items(items=dicts)
         headlines = Utils.extract_headline_from_items(dicts)
 
-        Excel_Utils.appned_list_of_string_to_sheet(
+        summary = monthly_summary.convert_to_dictionary()
+
+        Excel_Utils.append_list_of_string_to_sheet(
             sheet=sheet,
             items=headlines,
-            format_cell_method=Excel_Utils.format_cell_headline,
+            cell_formatting_method=Excel_Utils.format_cell_headline,
         )
         Excel_Utils.append_list_of_dictionary_to_sheet(
             sheet=sheet,
-            items=sorted_items,
-            format_cell_method=Excel_Utils.format_cell_default,
+            items=dicts,
+            cell_formatting_method=Excel_Utils.format_cell_default,
+        )
+        Excel_Utils.append_dictionary_to_sheet(
+            sheet=sheet,
+            dictionary=summary,
+            cell_formatting_method=Excel_Utils.format_cell_summary,
         )
 
-        Utils.format_catoegories(sheet=sheet, catoegories_column_index=1)
+        Utils.freeze_top_row(sheet=sheet)
+        Utils.format_categories(sheet=sheet, categories_column_index=1)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=1)
+        Utils.merge_identical_cells_by_column(sheet=sheet, column_index=4)
+        Utils.merge_identical_cells_by_column(sheet=sheet, column_index=5)
 
     @staticmethod
-    def format_catoegories(sheet: Worksheet, catoegories_column_index: int) -> None:
+    def format_categories(sheet: Worksheet, categories_column_index: int) -> None:
         for row in sheet.iter_rows(
-            min_col=catoegories_column_index, max_col=catoegories_column_index
+            min_col=categories_column_index, max_col=categories_column_index
         ):
             for cell in row:
-                catoegory = cell.value
-                if catoegory in Config.CATEGORIES_COLOR:
-                    rgb_color = Config.CATEGORIES_COLOR[catoegory]
+                category = cell.value
+                if category in Config.CATEGORIES_COLOR:
+                    rgb_color = Config.CATEGORIES_COLOR[category]
                     color = Color(rgb=rgb_color)
                     cell.fill = PatternFill(patternType="solid", fgColor=color)
 
@@ -225,3 +216,7 @@ class Utils:
             previous_cell = Excel_Utils.select_cell(sheet, row_index - 1, column_index)
             Excel_Utils.merge_cells(sheet, target_cell, previous_cell)  # type: ignore
             target_cell = current_cell
+
+    @staticmethod
+    def freeze_top_row(sheet: Worksheet):
+        sheet.freeze_panes = "A2"

@@ -1,6 +1,7 @@
 from openpyxl import Workbook, load_workbook
 from openpyxl.cell import Cell
-from openpyxl.styles import Alignment, Font
+from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.styles.colors import Color
 from openpyxl.worksheet.worksheet import Worksheet
 
 from config import Config
@@ -88,8 +89,8 @@ class Excel_Utils:
             print("Close Excel File Please")
 
     @staticmethod
-    def appned_list_of_string_to_sheet(
-        sheet: Worksheet, items: list[str], format_cell_method
+    def append_list_of_string_to_sheet(
+        sheet: Worksheet, items: list[str], cell_formatting_method
     ) -> None:
         row_index = Excel_Utils.compute_last_row_index(sheet)
 
@@ -102,11 +103,13 @@ class Excel_Utils:
             column_index += 1
             cell = sheet.cell(row=row_index, column=column_index)
             cell.value = value
-            format_cell_method(cell)
+            cell_formatting_method(cell)
 
     @staticmethod
     def append_dictionary_to_sheet(
-        sheet: Worksheet, dictionary: dict, format_cell_method
+        sheet: Worksheet,
+        dictionary: dict,
+        cell_formatting_method,
     ) -> None:
         row_index = Excel_Utils.compute_last_row_index(sheet)
 
@@ -119,11 +122,11 @@ class Excel_Utils:
             column_index += 1
             cell = sheet.cell(row=row_index, column=column_index)
             cell.value = value
-            format_cell_method(cell)
+            cell_formatting_method(cell)
 
     @staticmethod
     def append_list_of_dictionary_to_sheet(
-        sheet: Worksheet, items: list[dict], format_cell_method
+        sheet: Worksheet, items: list[dict], cell_formatting_method
     ) -> None:
         row_index = Excel_Utils.compute_last_row_index(sheet)
 
@@ -134,7 +137,7 @@ class Excel_Utils:
                 column_index += 1
                 cell = sheet.cell(row=row_index, column=column_index)
                 cell.value = value
-                format_cell_method(cell)
+                cell_formatting_method(cell)
 
     @staticmethod
     def compute_last_row_index(sheet: Worksheet) -> int:
@@ -167,6 +170,20 @@ class Excel_Utils:
             horizontal="center",
             vertical="center",
         )
+
+    @staticmethod
+    def format_cell_summary(cell: Cell) -> None:
+        cell.font = Font(
+            name=Config.FONT_NAME,
+            size=Config.HEADLINE_FONT_SIZE,
+            bold=True,
+        )
+        cell.alignment = Alignment(
+            horizontal="center",
+            vertical="center",
+        )
+        color = Color(rgb=Config.SUMMARY_COLOR)
+        cell.fill = PatternFill(patternType="solid", fgColor=color)
 
     @staticmethod
     def select_cell(sheet: Worksheet, row_index: int, column_index: int) -> Cell:

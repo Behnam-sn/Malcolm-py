@@ -5,18 +5,18 @@ from domain.time import Time
 
 
 @dataclass
-class Entery_And_Exit:
+class Enter_And_Exit:
     id: int
     date: str
-    entery_time: Time | None = None
+    enter_time: Time | None = None
     exit_time: Time | None = None
     total_time: Time = field(default_factory=Time)
 
     def convert_to_dictionary(self):
         return {
             "تاریخ": self.date,
-            "ساعت ورود": self.entery_time.convert_to_string()
-            if self.entery_time != None
+            "ساعت ورود": self.enter_time.convert_to_string()
+            if self.enter_time != None
             else None,
             "ساعت خروج": self.exit_time.convert_to_string()
             if self.exit_time != None
@@ -24,8 +24,8 @@ class Entery_And_Exit:
             "مجموع ساعت": self.total_time.convert_to_string(),
         }
 
-    def set_entery_time(self, time: datetime.time):
-        self.entery_time = Time(
+    def set_enter_time(self, time: datetime.time):
+        self.enter_time = Time(
             hour=time.hour,
             minute=time.minute,
         )
@@ -39,18 +39,18 @@ class Entery_And_Exit:
         self.compute_total_time()
 
     def compute_total_time(self):
-        if self.entery_time == None or self.exit_time == None:
+        if self.enter_time == None or self.exit_time == None:
             return
 
         hour = self.exit_time.hour
         minute = self.exit_time.minute
 
-        if self.entery_time.minute > self.exit_time.minute:
+        if self.enter_time.minute > self.exit_time.minute:
             hour -= 1
             minute += 60
 
-        hour -= self.entery_time.hour
-        minute -= self.entery_time.minute
+        hour -= self.enter_time.hour
+        minute -= self.enter_time.minute
 
         self.total_time.hour = hour
         self.total_time.minute = minute
