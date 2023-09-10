@@ -197,3 +197,7 @@ class Excel_Utils:
             end_row=cell_2.row,
             end_column=cell_2.column,
         )
+
+    @staticmethod
+    def freeze_top_row(sheet: Worksheet):
+        sheet.freeze_panes = "A2"

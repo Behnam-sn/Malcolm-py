@@ -78,7 +78,7 @@ class Utils:
             cell_formatting_method=Excel_Utils.format_cell_summary,
         )
 
-        Utils.freeze_top_row(sheet=sheet)
+        Excel_Utils.freeze_top_row(sheet=sheet)
 
     @staticmethod
     def generate_daily_report_sheet(workbook: Workbook, records: list[Record]) -> None:
@@ -102,7 +102,7 @@ class Utils:
             cell_formatting_method=Excel_Utils.format_cell_default,
         )
 
-        Utils.freeze_top_row(sheet=sheet)
+        Excel_Utils.freeze_top_row(sheet=sheet)
         Utils.format_categories(sheet=sheet, categories_column_index=4)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=1)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=2)
@@ -129,7 +129,7 @@ class Utils:
             cell_formatting_method=Excel_Utils.format_cell_default,
         )
 
-        Utils.freeze_top_row(sheet=sheet)
+        Excel_Utils.freeze_top_row(sheet=sheet)
         Utils.format_categories(sheet=sheet, categories_column_index=2)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=1)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=2)
@@ -170,7 +170,7 @@ class Utils:
             cell_formatting_method=Excel_Utils.format_cell_summary,
         )
 
-        Utils.freeze_top_row(sheet=sheet)
+        Excel_Utils.freeze_top_row(sheet=sheet)
         Utils.format_categories(sheet=sheet, categories_column_index=1)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=1)
         Utils.merge_identical_cells_by_column(sheet=sheet, column_index=4)
@@ -216,7 +216,3 @@ class Utils:
             previous_cell = Excel_Utils.select_cell(sheet, row_index - 1, column_index)
             Excel_Utils.merge_cells(sheet, target_cell, previous_cell)  # type: ignore
             target_cell = current_cell
-
-    @staticmethod
-    def freeze_top_row(sheet: Worksheet):
-        sheet.freeze_panes = "A2"
